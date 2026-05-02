@@ -41,6 +41,31 @@
 //#define WEB_DATA_WIDGET_URL "" // Use this to make your own widgets using an API/Webdata source
 //#define WEB_DATA_STOCK_WIDGET_URL "http://<insert host here>/stocks.php?stocks=SPY,VT,GOOG,TSLA,GME" // Use this as an alternative to the stock ticker widget
 
+// PROMETHEUS CONFIGURATION
+// Query up to 5 metrics and display them across the orbs.
+// Each query string format: "promql;label;unit;min;max;viz;color"
+//   promql  — PromQL expression (';' is not valid PromQL, so it is safe as a delimiter)
+//   label   — display name shown on the orb (leave empty to use the raw query)
+//   unit    — unit suffix, e.g. "MB", "%", "req/s" (can be empty)
+//   min/max — value range used by gauge and bar visualisations
+//   viz     — visualisation type: text | gauge | bar
+//   color   — optional RGB565 hex colour, e.g. 0x07E0 (green), 0xFD20 (orange)
+//             defaults to cyan when omitted
+// Note: label matchers with double quotes must be escaped, e.g. {job=\"myapp\"}
+//       or use regex without quotes: {job=~"myapp"}
+//
+//#define PROMETHEUS_URL "http://192.168.1.100:9090"
+//#define PROMETHEUS_UPDATE_INTERVAL 30   // seconds between refreshes (default 30)
+//#define PROMETHEUS_USER "user"          // optional basic-auth credentials
+//#define PROMETHEUS_PASS "password"
+//
+// Example queries:
+//#define PROMETHEUS_QUERY_1 "up;Status;;0;1;gauge;0x07E0"
+//#define PROMETHEUS_QUERY_2 "node_load1;CPU Load;;0;4;gauge;0xFD20"
+//#define PROMETHEUS_QUERY_3 "node_memory_MemAvailable_bytes/(1024*1024);Mem Free;MB;0;8192;bar;0x001F"
+//#define PROMETHEUS_QUERY_4 "rate(node_network_receive_bytes_total[5m]);Net RX;B/s;0;125000;bar;0xF81F"
+//#define PROMETHEUS_QUERY_5 "node_filesystem_avail_bytes{mountpoint=~\"/\"} / (1024*1024*1024);Disk Free;GB;0;500;gauge;0x07FF"
+
 // MQTT CONFIGURATION
 //#define MQTT_WIDGET_HOST "192.168.3.40" // MQTT broker host
 //#define MQTT_WIDGET_PORT 1883 // MQTT broker port

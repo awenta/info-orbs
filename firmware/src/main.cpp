@@ -20,6 +20,9 @@
 #ifdef MQTT_WIDGET_HOST
     #include "mqttwidget/MQTTWidget.h"
 #endif
+#ifdef PROMETHEUS_URL
+    #include "prometheuswidget/PrometheusWidget.h"
+#endif
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -137,6 +140,9 @@ void setup() {
 #endif
 #ifdef MQTT_WIDGET_HOST
     widgetSet->add(new MQTTWidget(*sm, MQTT_WIDGET_HOST, MQTT_WIDGET_PORT));
+#endif
+#ifdef PROMETHEUS_URL
+    widgetSet->add(new PrometheusWidget(*sm));
 #endif
 
     m_widgetCycleDelayPrev = millis();
