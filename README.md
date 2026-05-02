@@ -140,7 +140,40 @@ Simply adjust the 5 stocks in the config file to change the ones you'd like to t
    //#define WEB_DATA_WIDGET_URL "" // Use this to make your own widgets using an    API/Webdata source
    ```
 
+6. **Prometheus** (Disabled By Default) - Displays live metrics from a [Prometheus](https://prometheus.io/) monitoring server. Each of the 5 orbs can show an independent PromQL query in one of three visualisation styles:
+   - **gauge** — arc speedometer showing the value as a percentage of a configured min/max range
+   - **bar** — vertical level indicator with 25/50/75% tick marks
+   - **text** — clean label + value display with a decorative ring border
 
+   Press the middle button at any time to force an immediate data refresh. Values are automatically formatted with SI suffixes (k / M / G) and PromQL expressions are URL-encoded before the request is sent.
+
+   To enable, uncomment `PROMETHEUS_URL` and define between one and five query slots. Each query slot uses the format:
+   ```
+   "promql;label;unit;min;max;viz;color"
+   ```
+   | Field | Description |
+   |-------|-------------|
+   | `promql` | Any valid PromQL instant query |
+   | `label` | Display name shown on the orb (leave empty to show the raw query) |
+   | `unit` | Unit suffix, e.g. `MB`, `%`, `req/s` — can be empty |
+   | `min` / `max` | Value range used by `gauge` and `bar` visualisations |
+   | `viz` | `gauge`, `bar`, or `text` |
+   | `color` | Optional RGB565 hex colour, e.g. `0x07E0` (green). Defaults to cyan. |
+
+   > **Note:** `;` is used as the field delimiter because it is not valid PromQL syntax. If your PromQL label matcher contains double quotes you must escape them: `{job=\"myapp\"}`.
+
+   ```c
+   //#define PROMETHEUS_URL "http://192.168.1.100:9090"
+   //#define PROMETHEUS_UPDATE_INTERVAL 30   // seconds between refreshes (default 30)
+   //#define PROMETHEUS_USER "user"          // optional basic-auth credentials
+   //#define PROMETHEUS_PASS "password"
+   //
+   //#define PROMETHEUS_QUERY_1 "up;Status;;0;1;gauge;0x07E0"
+   //#define PROMETHEUS_QUERY_2 "node_load1;CPU Load;;0;4;gauge;0xFD20"
+   //#define PROMETHEUS_QUERY_3 "node_memory_MemAvailable_bytes/(1024*1024);Mem Free;MB;0;8192;bar;0x001F"
+   //#define PROMETHEUS_QUERY_4 "rate(node_network_receive_bytes_total[5m]);Net RX;B/s;0;125000;bar;0xF81F"
+   //#define PROMETHEUS_QUERY_5 "node_filesystem_avail_bytes{mountpoint=~\"/\"} / (1024*1024*1024);Disk Free;GB;0;500;gauge;0x07FF"
+   ```
 
 
 And thats it, goodluck & happy orbin (:
